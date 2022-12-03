@@ -7,7 +7,10 @@ const ALCHEMY_API_KEY = "OcIRYIOaALmuepVj7JMx2wjmvIUCFRFH";
 // To export your private key from Metamask, open Metamask and
 // go to Account Details > Export Private Key.
 // Beware: NEVER put real Ether into testing accounts
-const METAMASK_PRIVATE_KEY = "b9e9f4740b5c99e4a4b3cc92f24329a03acdcbd4012b1b4b2f5ba79144ee2183";
+// const METAMASK_PRIVATE_KEY = "b9e9f4740b5c99e4a4b3cc92f24329a03acdcbd4012b1b4b2f5ba79144ee2183";
+
+// "Bank" account
+const METAMASK_PRIVATE_KEY = "8779e237dc37db84b41c6a5c37b6fe006b87b166d4cf22f32835019f5fa3a851";
 
 const config = {
   solidity: "0.8.9",
