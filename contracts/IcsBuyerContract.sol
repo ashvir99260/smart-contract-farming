@@ -1,16 +1,20 @@
 pragma solidity ^0.8.0;
 // SPDX-License-Identifier: UNLICENSED
 
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "./EscrowPurchase.sol";
 import "./Incentives.sol";
 import "./FarmerIcsContract.sol";
+import "./IcsBuyerEventEnum.sol";
 
 contract IcsBuyerContract is EscrowPurchase {
+  using SafeERC20 for IERC20;
 
   address owner;
   address[] farmers = new address[](500);  // ALERT - HARDCODED LIMIT
   mapping(address => address) farmerContracts;
   address incentiveContract;
+  mapping(IcsBuyerEventEnum => uint256) eventIncentiveTable;
 
   constructor(address _tokenAddress
     , string memory _productName
@@ -59,6 +63,23 @@ contract IcsBuyerContract is EscrowPurchase {
     farmerContracts[_farmer] = _farmerContract;
   }
 
+  function acceptHarvest(
+    uint256 quantity
+    , uint256 price
+  )
+  onlyBuyer
+  external
+  {
+    uint256 _amount = quantity * price * (10**18);
+   
+    // DUPLICATE CODE - copy of _releaseAmount - how to call internal functions from inheriting contract?
+    PaymentToken token = PaymentToken(erc20Address);
+    uint256 balance = token.balanceOf(address(this));
+    require( _amount < balance, "Can't release final funds. Insufficient funds");
+
+    IERC20(token).safeTransfer(address(seller), _amount);
+  }
+
   function settleFarmer(
     address _farmer
     , uint256 quantity
@@ -99,5 +120,22 @@ contract IcsBuyerContract is EscrowPurchase {
     Incentives iContract = Incentives(incentiveContract);
     iContract.addEvent(_uri, _recipient, _eventId);
   }
+
+  function submitEvent(IcsBuyerEventEnum _event)
+  onlyBuyer
+  external
+  {
+    uint256 releasePct = eventIncentiveTable[_event];
+    if (releasePct == 0) {
+      return; // not found
+    }
+    PaymentToken token = PaymentToken(erc20Address);
+    uint256 balance = token.balanceOf(address(this));
+    uint256 amountToRelease = releasePct * contractValueMin / 10_000;
+    require( amountToRelease < balance, "Insufficient funds");
+
+    this.releaseAmount(amountToRelease);
+  }
+
 }
 

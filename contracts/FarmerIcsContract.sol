@@ -3,10 +3,12 @@ pragma solidity ^0.8.0;
 
 import "./EscrowPurchase.sol";
 import "./Incentives.sol";
+import "./FarmerIcsEventEnum.sol";
 
 contract FarmerIcsContract is EscrowPurchase {
   address incentiveContract;
   address parentContract;
+  mapping(FarmerIcsEventEnum => uint256) eventIncentiveTable;
 
   constructor(
     address _tokenAddress
