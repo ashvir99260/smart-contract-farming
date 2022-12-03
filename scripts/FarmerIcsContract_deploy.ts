@@ -16,7 +16,7 @@ const DOWNPAYMENT_BPS = 200; // 1%
 const TOKEN_ADDRESS = "0x9A3d350cF715909dFaE4336d37F84E0Ae2682312";
 
  async function main() {
-   const factory = await ethers.getContractFactory("IcsBuyerContract");
+   const factory = await ethers.getContractFactory("FarmerIcsContract");
    console.log('Deploying FarmerIcsContract...');
 
    const deployment = await factory.deploy(
