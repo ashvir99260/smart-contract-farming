@@ -15,6 +15,8 @@ import {
 } from "@mui/icons-material";
 import BuyerTimeLine from "../buyer/BuyerTimeLine";
 
+import ShowStatus from "./ShowStatus";
+
 function BuyerContractComponent({ signContract }) {
   const { loading, data, fetchData } = useFetchContractDetails();
 
@@ -219,7 +221,7 @@ function BuyerContractComponent({ signContract }) {
               </Grid>
               <Grid container item xs={12}>
                 <Grid item xs={6}>
-                  Signed by : {selectedData?.sellerName}
+                  <ShowStatus data={selectedData} />
                 </Grid>
                 <Grid item xs={6} container justifyContent="flex-end">
                   <Button

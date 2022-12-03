@@ -29,6 +29,7 @@ import {
 } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import BuyerTimeLine from "./BuyerTimeLine";
+import ShowStatus from "../banker/ShowStatus";
 
 function Buyer() {
   const { library: web3, account } = useMetaMask();
@@ -278,7 +279,7 @@ function Buyer() {
                   />
                 </Grid>
                 <Grid item xs={6}>
-                  Signed due from : {selectedData?.buyerName}
+                  <ShowStatus data={selectedData} />
                 </Grid>
                 <Grid item xs={6} container justifyContent="flex-end">
                   <Button variant="contained">Sign Contract</Button>
