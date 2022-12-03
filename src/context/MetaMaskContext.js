@@ -51,7 +51,7 @@ export const MetaMaskProvider = ({ children }) => {
       connect,
       disconnect,
     }),
-    [isActive, isLoading]
+    [isActive, isLoading, account]
   );
 
   return (
