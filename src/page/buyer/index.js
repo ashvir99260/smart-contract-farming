@@ -11,7 +11,12 @@ import {
   Typography,
 } from "@mui/material";
 
-import { fpoContractAddress } from "../../web3/constants";
+import useMetaMask from "../../context/MetaMaskContext";
+
+// import { ICSBuyerContractAddress } from "../../web3/constants";
+import FarmerContract from "../../artifacts/contracts/FarmerIcsContract.sol/FarmerIcsContract.json";
+import BuyerContract from "../../artifacts/contracts/IcsBuyerContract.sol/IcsBuyerContract.json";
+import { ICSBuyerContractAddress } from "../../web3/constants";
 
 import { DataGrid } from "@mui/x-data-grid";
 import useFetchContractDetails from "../../hooks/useFetchContractDetails";
@@ -25,12 +30,13 @@ import {
 import BuyerTimeLine from "./BuyerTimeLine";
 
 function Buyer() {
+  const { library: web3, account } = useMetaMask();
   const { loading, data, fetchData } = useFetchContractDetails();
   const [openModal, setOpenModal] = useState(false);
   const [selectedData, setSelectedData] = useState({});
 
   useEffect(() => {
-    fetchData(fpoContractAddress);
+    fetchData(ICSBuyerContractAddress);
   }, []);
 
   const columns = [
@@ -80,6 +86,24 @@ function Buyer() {
   const handleClose = () => {
     setOpenModal(false);
     setSelectedData(undefined);
+  };
+
+  const signContract = async () => {
+    try {
+      const contract = new web3.eth.Contract(
+        BuyerContract.abi,
+        ICSBuyerContractAddress
+      );
+      const d = await contract.methods;
+      console.log("contract", d);
+      const reciept = await contract.methods.buyerSign().send({
+        from: account,
+        gas: 8000000,
+      });
+      console.log("rr", reciept);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (

@@ -17,6 +17,7 @@ import useMetaMask from "./context/MetaMaskContext";
 import data from "./data/accountData.json";
 import Buyer from "./page/buyer";
 import Layout from "./components/Layout";
+import Form from "./page/form";
 
 const PrivateRoute = ({ children }) => {
   const { account } = useMetaMask();
@@ -44,6 +45,7 @@ const routes = {
   FPO: "/fpo",
   BANKER: "/banker",
   BUYER: "/buyer",
+  FORM: "/form",
 };
 
 function Router() {
@@ -84,6 +86,10 @@ function Router() {
           <Buyer />
         </PrivateRoute>
       ),
+    },
+    {
+      path: routes.FORM,
+      element: <Form />,
     },
   ];
 

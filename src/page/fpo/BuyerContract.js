@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { DataGrid } from "@mui/x-data-grid";
 
-import { fpoContractAddress } from "../../web3/constants";
+import { ICSBuyerContractAddress } from "../../web3/constants";
 
 import useFetchContractDetails from "../../hooks/useFetchContractDetails";
 
@@ -22,7 +22,7 @@ function BuyerContract() {
   const [selectedData, setSelectedData] = useState({});
 
   useEffect(() => {
-    fetchData(fpoContractAddress);
+    fetchData(ICSBuyerContractAddress);
   }, []);
 
   const handleClose = () => {
