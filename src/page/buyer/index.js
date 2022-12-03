@@ -117,6 +117,27 @@ function Buyer() {
     }
   };
 
+  const approveContract = async () => {
+    try {
+      const contract = new web3.eth.Contract(
+        BuyerContract.abi,
+        ICSBuyerContractAddress
+      );
+      const d = await contract.methods;
+      const reciept = await contract.methods
+        .approve(ICSBuyerContractAddress, data?.[0]?.contractValueMax)
+        .send({
+          from: account,
+          gas: 8000000,
+        });
+      toast.success("Transaction Done");
+    } catch (error) {
+      console.error(error);
+
+      toast.error("Transaction Failed");
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -259,32 +280,47 @@ function Buyer() {
                 <Typography variant="h6">Release Events</Typography>
                 <BuyerTimeLine />
               </Grid>
-              <Grid container spacing={2}>
-                <Grid item xs={6}>
-                  <TextField
-                    label="Quantity"
-                    variant="outlined"
-                    fullWidth
-                    value={quantity}
-                    onChange={(e) => setQuantity(e.target.value)}
-                  />
+              {selectedData?.buyerSigned ? (
+                <Grid container spacing={2}>
+                  <Grid item xs={6}>
+                    <TextField
+                      label="Quantity"
+                      variant="outlined"
+                      fullWidth
+                      value={quantity}
+                      onChange={(e) => setQuantity(e.target.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <TextField
+                      label="Price"
+                      variant="outlined"
+                      fullWidth
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
+                    <ShowStatus data={selectedData} />
+                  </Grid>
+                  <Grid item xs={6} container justifyContent="flex-end">
+                    <Button variant="contained" onClick={approveContract}>
+                      Approve
+                    </Button>
+                  </Grid>
                 </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    label="Price"
-                    variant="outlined"
-                    fullWidth
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
-                  />
+              ) : (
+                <Grid container spacing={2}>
+                  <Grid item xs={6}>
+                    <ShowStatus data={selectedData} />
+                  </Grid>
+                  <Grid item xs={6} container justifyContent="flex-end">
+                    <Button variant="contained" onClick={signContract}>
+                      Sign Contract
+                    </Button>
+                  </Grid>
                 </Grid>
-                <Grid item xs={6}>
-                  <ShowStatus data={selectedData} />
-                </Grid>
-                <Grid item xs={6} container justifyContent="flex-end">
-                  <Button variant="contained">Sign Contract</Button>
-                </Grid>
-              </Grid>
+              )}
             </Grid>
           </Paper>
         </Dialog>
