@@ -1,5 +1,11 @@
 1. Background + plus problem we're trying to solve and why
-2. Contracts are setup ahead of time, injected with a script
+2. Contracts are setup ahead of time, injected with a script.
+Two sets of contracts, one for buyer<> FPO and the other for FPO<>Farmer
+Physical contracts stored encrypted on IPFS using lighthouse, referenced in abbove contracts 
+Contract NFT minted with IPFS uri 
+All smart contracts on Polygon
+Attempted push notifications to notify when payments are released (but not workng)
+
 3. In the final product, contracts will be created from a UI that might look like this:
     
     < show the contract creation UI >

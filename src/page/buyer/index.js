@@ -158,7 +158,6 @@ function Buyer() {
           from: account,
           gas: 8000000,
         });
-      await signContract();
     } catch (error) {
       console.error(error);
 
