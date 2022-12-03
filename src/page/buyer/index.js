@@ -22,7 +22,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import useFetchContractDetails from "../../hooks/useFetchContractDetails";
 import Dialog from "../../components/Dialog";
 import {
-  CurrencyBitcoin,
+  CurrencyExchange,
   CalendarMonth,
   WorkspacePremium,
   EnergySavingsLeaf,
@@ -34,6 +34,8 @@ function Buyer() {
   const { loading, data, fetchData } = useFetchContractDetails();
   const [openModal, setOpenModal] = useState(false);
   const [selectedData, setSelectedData] = useState({});
+  const [quantity, setQuantity] = useState();
+  const [price, setPrice] = useState();
 
   useEffect(() => {
     fetchData(ICSBuyerContractAddress);
@@ -46,8 +48,8 @@ function Buyer() {
       minWidth: 150,
     },
     {
-      field: "buyerName",
-      headerName: "Buyer",
+      field: "sellerName",
+      headerName: "FPO",
       minWidth: 150,
     },
     {
@@ -179,9 +181,9 @@ function Buyer() {
                   }}
                 >
                   <Chip
-                    icon={<CurrencyBitcoin />}
+                    icon={<CurrencyExchange />}
                     sx={{ m: 0.5, borderRadius: "8px" }}
-                    label={`${selectedData?.estimatedYieldMin} - ${selectedData?.estimatedYieldMax}`}
+                    label={`${selectedData?.estimatedPriceMin} - ${selectedData?.estimatedPriceMax}`}
                   />
                   <Chip
                     icon={<CalendarMonth />}
@@ -250,10 +252,22 @@ function Buyer() {
               </Grid>
               <Grid container spacing={2}>
                 <Grid item xs={6}>
-                  <TextField label="Quantity" variant="outlined" fullWidth />
+                  <TextField
+                    label="Quantity"
+                    variant="outlined"
+                    fullWidth
+                    value={quantity}
+                    onChange={(e) => setQuantity(e.target.value)}
+                  />
                 </Grid>
                 <Grid item xs={6}>
-                  <TextField label="Price" variant="outlined" fullWidth />
+                  <TextField
+                    label="Price"
+                    variant="outlined"
+                    fullWidth
+                    value={price}
+                    onChange={(e) => setPrice(e.target.value)}
+                  />
                 </Grid>
                 <Grid item xs={6}>
                   Signed due from : {selectedData?.buyerName}

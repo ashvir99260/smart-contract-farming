@@ -4,23 +4,29 @@ import { Box, Button, Divider, Grid, Paper, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import Chip from "@mui/material/Chip";
 
-import { farmerContractAddress } from "../../web3/constants";
+import {
+  farmerContractAddress,
+  ICSBuyerContractAddress,
+} from "../../web3/constants";
 
 import useFetchContractDetails from "../../hooks/useFetchContractDetails";
 import Dialog from "../../components/Dialog";
 
 import {
-  CurrencyBitcoin,
+  CurrencyExchange,
   CalendarMonth,
   WorkspacePremium,
   EnergySavingsLeaf,
 } from "@mui/icons-material";
 import FarmerTimeLine from "./FarmerTimeLine";
+import useMetaMask from "../../context/MetaMaskContext";
+import BuyerContract from "../../artifacts/contracts/IcsBuyerContract.sol/IcsBuyerContract.json";
 
 function Farmer() {
   const { loading, data, fetchData } = useFetchContractDetails();
   const [openModal, setOpenModal] = useState(false);
   const [selectedData, setSelectedData] = useState({});
+  const { library: web3, account } = useMetaMask();
 
   useEffect(() => {
     fetchData(farmerContractAddress);
@@ -34,7 +40,7 @@ function Farmer() {
     },
     {
       field: "buyerName",
-      headerName: "Buyer",
+      headerName: "FPO",
       minWidth: 150,
     },
     {
@@ -73,6 +79,24 @@ function Farmer() {
   const handleClose = () => {
     setOpenModal(false);
     setSelectedData(undefined);
+  };
+
+  const signContract = async () => {
+    try {
+      const contract = new web3.eth.Contract(
+        BuyerContract.abi,
+        ICSBuyerContractAddress
+      );
+      const d = await contract.methods;
+      console.log("contract", d);
+      const reciept = await contract.methods.sellerSign().send({
+        from: account,
+        gas: 8000000,
+      });
+      console.log("rr", reciept);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -148,9 +172,9 @@ function Farmer() {
                   }}
                 >
                   <Chip
-                    icon={<CurrencyBitcoin />}
+                    icon={<CurrencyExchange />}
                     sx={{ m: 0.5, borderRadius: "8px" }}
-                    label={`${selectedData?.estimatedYieldMin} - ${selectedData?.estimatedYieldMax}`}
+                    label={`${selectedData?.estimatedPriceMin} - ${selectedData?.estimatedPriceMax}`}
                   />
                   <Chip
                     icon={<CalendarMonth />}
@@ -222,7 +246,9 @@ function Farmer() {
                   Signed due from : {selectedData?.buyerName}
                 </Grid>
                 <Grid item xs={6} container justifyContent="flex-end">
-                  <Button variant="contained">Sign Contract</Button>
+                  <Button variant="contained" onClick={signContract}>
+                    Sign Contract
+                  </Button>
                 </Grid>
               </Grid>
             </Grid>

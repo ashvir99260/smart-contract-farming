@@ -10,16 +10,34 @@ import { Box, Button, Chip, Grid, Paper, Typography } from "@mui/material";
 import Dialog from "../../components/Dialog";
 import {
   CalendarMonth,
-  CurrencyBitcoin,
+  CurrencyExchange,
   EnergySavingsLeaf,
   WorkspacePremium,
 } from "@mui/icons-material";
 import BuyerTimeLine from "../buyer/BuyerTimeLine";
+import useMetaMask from "../../context/MetaMaskContext";
+import BuyerContract from "../../artifacts/contracts/IcsBuyerContract.sol/IcsBuyerContract.json";
 
-function BuyerContract() {
+function BuyerContractComponent() {
   const { loading, data, fetchData } = useFetchContractDetails();
   const [openModal, setOpenModal] = useState(false);
   const [selectedData, setSelectedData] = useState({});
+  const { library: web3, account } = useMetaMask();
+
+  const signContract = async (address) => {
+    try {
+      const contract = new web3.eth.Contract(BuyerContract.abi, address);
+      const d = await contract.methods;
+      console.log("contract", d);
+      const reciept = await contract.methods.sellerSign().send({
+        from: account,
+        gas: 8000000,
+      });
+      console.log("rr", reciept);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     fetchData(ICSBuyerContractAddress);
@@ -137,9 +155,9 @@ function BuyerContract() {
                   }}
                 >
                   <Chip
-                    icon={<CurrencyBitcoin />}
+                    icon={<CurrencyExchange />}
                     sx={{ m: 0.5, borderRadius: "8px" }}
-                    label={`${selectedData?.estimatedYieldMin} - ${selectedData?.estimatedYieldMax}`}
+                    label={`${selectedData?.estimatedPriceMin} - ${selectedData?.estimatedPriceMax}`}
                   />
                   <Chip
                     icon={<CalendarMonth />}
@@ -211,7 +229,9 @@ function BuyerContract() {
                   Signed by : {selectedData?.sellerName}
                 </Grid>
                 <Grid item xs={6} container justifyContent="flex-end">
-                  <Button variant="contained">Sign Contract</Button>
+                  <Button variant="contained" onClick={signContract}>
+                    Sign Contract
+                  </Button>
                 </Grid>
               </Grid>
             </Grid>
@@ -222,4 +242,4 @@ function BuyerContract() {
   );
 }
 
-export default BuyerContract;
+export default BuyerContractComponent;
