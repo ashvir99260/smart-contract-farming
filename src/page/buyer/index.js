@@ -7,6 +7,7 @@ import {
   Divider,
   Grid,
   Paper,
+  TextField,
   Typography,
 } from "@mui/material";
 
@@ -188,8 +189,8 @@ function Buyer() {
               p: 2,
             }}
           >
-            <Grid container>
-              <Grid item xs={12}>
+            <Grid>
+              <Grid>
                 <Typography variant="h6">Contract</Typography>
 
                 <Typography
@@ -219,11 +220,17 @@ function Buyer() {
                   Locked Amount: {selectedData?.tentativePrice}
                 </Typography>
               </Grid>
-              <Grid item xs={12} sx={{ mt: 3 }}>
+              <Grid sx={{ mt: 3 }}>
                 <Typography variant="h6">Release Events</Typography>
                 <BuyerTimeLine />
               </Grid>
-              <Grid container item xs={12}>
+              <Grid container spacing={2}>
+                <Grid item xs={6}>
+                  <TextField label="Quantity" variant="outlined" fullWidth />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField label="Price" variant="outlined" fullWidth />
+                </Grid>
                 <Grid item xs={6}>
                   Signed due from : {selectedData?.buyerName}
                 </Grid>
