@@ -1,43 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 import { Box, Button, Divider, Typography } from "@mui/material";
-import { farmerContractAddress } from "../../web3/constants";
-
-import useMetaMask from "../../context/MetaMaskContext";
-import FarmerContract from "../../artifacts/contracts/FarmerIcsContract.sol/FarmerIcsContract.json";
 
 import { DataGrid } from "@mui/x-data-grid";
 
+import { farmerContractAddress } from "../../web3/constants";
+
+import useFetchContractDetails from "../../hooks/useFetchContractDetails";
+import FarmerContract from "./FarmerContract";
+import BuyerContract from "./BuyerContract";
+import Tabs from "../../components/Tabs";
+
 function FPO() {
-  const { library: web3 } = useMetaMask();
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { loading, data, fetchData } = useFetchContractDetails();
 
   useEffect(() => {
-    fetchData();
-  }, [web3]);
-
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const contract = new web3.eth.Contract(
-        FarmerContract.abi,
-        farmerContractAddress
-      );
-
-      contract.methods
-        .getDetails2()
-        .call()
-        .then((res) => {
-          const result = Object.assign({}, res);
-          setData([{ id: farmerContractAddress, ...result }]);
-        });
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    fetchData(farmerContractAddress);
+  }, []);
 
   const columns = [
     {
@@ -68,12 +47,24 @@ function FPO() {
     {
       field: "actions",
       type: "actions",
-      renderCell: (params) => (
-        <Button variant="contained" color="secondary">
-          View Details
-        </Button>
-      ),
+      renderCell: (params) => <Button variant="contained">View Details</Button>,
       flex: 1,
+    },
+  ];
+
+  const labelList = [{ label: "with Farmer" }, { label: "with Buyer" }];
+  const componentList = [
+    {
+      component: FarmerContract,
+      props: {
+        columns,
+      },
+    },
+    {
+      component: BuyerContract,
+      props: {
+        columns,
+      },
     },
   ];
 
@@ -89,10 +80,9 @@ function FPO() {
       <Box
         sx={{
           p: 2,
-          height: "85vh",
         }}
       >
-        <DataGrid loading={loading} rows={data} columns={columns} />
+        <Tabs componentList={componentList} labelList={labelList} />
       </Box>
     </Box>
   );
