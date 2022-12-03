@@ -16,6 +16,7 @@ import useMetaMask from "./context/MetaMaskContext";
 
 import data from "./data/accountData.json";
 import Buyer from "./page/buyer";
+import Layout from "./components/Layout";
 
 const PrivateRoute = ({ children }) => {
   const { account } = useMetaMask();
@@ -33,7 +34,7 @@ const PrivateRoute = ({ children }) => {
   if (!validateUserRoute) {
     return <Navigate to="/login" />;
   }
-  return children;
+  return <Layout>{children}</Layout>;
 };
 
 const routes = {
