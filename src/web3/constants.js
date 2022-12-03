@@ -1,3 +1,4 @@
 export const farmerContractAddress =
-  "0x1dD8629e4e4e659CB10344a063847fc5bc29c25C";
-export const fpoContractAddress = "0xe9817a5D9c02EeA1C2329D94E3799B539CdfD519";
+  "0x1F57C6462f76a2997D664919e7D4871bbe852dD6";
+export const ICSBuyerContractAddress =
+  "0x91A740c65F554c6A7A509e1a99e3F7fAe4fE88EB";
