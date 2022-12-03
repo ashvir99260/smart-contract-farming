@@ -26,6 +26,9 @@ struct ContractDetails {
   uint256 releasedAmount;
   uint256 lockedAmount;
   address contractNFT;
+
+  uint256 contractValueMin;
+  uint256 contractValueMax;
 }
 
 // Buyer<>Seller contract
@@ -148,13 +151,16 @@ contract EscrowPurchase {
   external
   {
     PaymentToken token = PaymentToken(erc20Address);
-    uint256 balance = token.balanceOf(address(this));
-    require(balance >= contractValueMax, "Please deposit tokens before signing contract");
+    uint256 balance = token.balanceOf(buyer);
+    require(balance >= contractValueMax, "Insufficient tokens for signing contract");
     buyerSigned = true;
     lockedAmount = balance;
     emit BuyerSigned(buyer, seller, contractValueMin, contractValueMax);
+        
+    uint256 allowance = token.allowance(msg.sender, address(this));
+    require(allowance >= contractValueMax, "Can not transfer tokens into contract. Insufficient token allowance");
 
-    _makeDownpayment(); //  release the pre-payment
+    IERC20(token).safeTransferFrom(buyer, address(this), contractValueMax);
   }
 
   function sellerSign()
@@ -358,6 +364,8 @@ contract EscrowPurchase {
       , releasedAmount
       , lockedAmount
       , contractNFT
+      , contractValueMin
+      , contractValueMax
     );
   }
 

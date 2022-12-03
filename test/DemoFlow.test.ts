@@ -78,7 +78,7 @@ describe("ICS/Buyer contract", function() {
 
       async function tokenTransfer() {
         // Transfer tokens to buyer 
-        await bankTokens.transfer(buyer.address, oneM); // bank => Buyer
+        await bankTokens.transfer(buyer.address, twoM); // bank => Buyer
         await buyerTokens.transfer(icsBuyerContract.address, oneM); // Buyer => ICS
       }
 
@@ -95,6 +95,7 @@ describe("ICS/Buyer contract", function() {
         expect(receipt.events[0].args?.buyer).to.equal(buyer.address, "Buyer address doesn't match in AdminSigned event");
       }
       async function buyerSigns() { // Buyer signs contract
+        await buyerTokens.approve(icsBuyerContract.address, "6000000000000000000000");
         const buyerSignTx = await asBuyer.buyerSign();
         const receipt = await buyerSignTx.wait();
         if (!receipt.events) {

@@ -27,6 +27,7 @@ import {
   WorkspacePremium,
   EnergySavingsLeaf,
 } from "@mui/icons-material";
+import { toast } from "react-toastify";
 import BuyerTimeLine from "./BuyerTimeLine";
 
 function Buyer() {
@@ -58,14 +59,20 @@ function Buyer() {
       minWidth: 150,
     },
     {
-      field: "tentativeYield",
-      headerName: "Tentative yield",
+      field: "estimatedYield",
+      headerName: "Estimated yield",
       minWidth: 150,
+      valueGetter: function (params) {
+        return `${params?.row?.estimatedYieldMin} - ${params?.row?.estimatedYieldMax} Tonnes`;
+      },
     },
     {
-      field: "tentativePrice",
-      headerName: "Price Agreed",
+      field: "estimatedPrice",
+      headerName: "Estimated Price",
       minWidth: 150,
+      valueGetter: function (params) {
+        return `${params?.row?.estimatedPriceMin} - ${params?.row?.estimatedPriceMax}`;
+      },
     },
     {
       field: "actions",
@@ -97,14 +104,15 @@ function Buyer() {
         ICSBuyerContractAddress
       );
       const d = await contract.methods;
-      console.log("contract", d);
       const reciept = await contract.methods.buyerSign().send({
         from: account,
         gas: 8000000,
       });
-      console.log("rr", reciept);
+      toast.success("Transaction Done");
     } catch (error) {
       console.error(error);
+
+      toast.error("Transaction Failed");
     }
   };
 

@@ -71,12 +71,13 @@ contract IcsBuyerContract is EscrowPurchase {
   external
   {
     uint256 _amount = quantity * price * (10**18);
-   
+
     // DUPLICATE CODE - copy of _releaseAmount - how to call internal functions from inheriting contract?
     PaymentToken token = PaymentToken(erc20Address);
     uint256 balance = token.balanceOf(address(this));
     require( _amount < balance, "Can't release final funds. Insufficient funds");
-
+    // console.log("Releasing final payment");
+    // console.log(_amount/(10**18));
     IERC20(token).safeTransfer(address(seller), _amount);
   }
 

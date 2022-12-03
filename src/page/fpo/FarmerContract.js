@@ -17,24 +17,31 @@ import FarmerTimeLine from "../farmer/FarmerTimeLine";
 import BuyerContract from "../../artifacts/contracts/IcsBuyerContract.sol/IcsBuyerContract.json";
 import useMetaMask from "../../context/MetaMaskContext";
 
+import { toast } from "react-toastify";
+
 function FarmerContract() {
   const { loading, data, fetchData } = useFetchContractDetails();
   const [openModal, setOpenModal] = useState(false);
   const [selectedData, setSelectedData] = useState({});
   const { library: web3, account } = useMetaMask();
 
-  const signContract = async (address) => {
+  const signContract = async () => {
     try {
-      const contract = new web3.eth.Contract(BuyerContract.abi, address);
+      const contract = new web3.eth.Contract(
+        BuyerContract.abi,
+        farmerContractAddress
+      );
       const d = await contract.methods;
-      console.log("contract", d);
       const reciept = await contract.methods.buyerSign().send({
         from: account,
         gas: 8000000,
       });
-      console.log("rr", reciept);
+      handleClose();
+      toast.success("Transaction Done");
     } catch (error) {
       console.error(error);
+
+      toast.error("Transaction Failed");
     }
   };
 
@@ -55,7 +62,7 @@ function FarmerContract() {
     },
     {
       field: "sellerName",
-      headerName: "FArmer",
+      headerName: "Farmer",
       minWidth: 150,
     },
     {
@@ -64,14 +71,20 @@ function FarmerContract() {
       minWidth: 150,
     },
     {
-      field: "tentativeYield",
-      headerName: "Tentative yield",
+      field: "estimatedYield",
+      headerName: "Estimated yield",
       minWidth: 150,
+      valueGetter: function (params) {
+        return `${params?.row?.estimatedYieldMin} - ${params?.row?.estimatedYieldMax} Tonnes`;
+      },
     },
     {
-      field: "tentativePrice",
-      headerName: "Price Agreed",
+      field: "estimatedPrice",
+      headerName: "Estimated Price",
       minWidth: 150,
+      valueGetter: function (params) {
+        return `${params?.row?.estimatedPriceMin} - ${params?.row?.estimatedPriceMax}`;
+      },
     },
     {
       field: "actions",

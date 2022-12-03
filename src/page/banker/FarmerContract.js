@@ -37,7 +37,12 @@ function FarmerContract({ signContract }) {
     },
     {
       field: "buyerName",
-      headerName: "Buyer",
+      headerName: "FPO",
+      minWidth: 150,
+    },
+    {
+      field: "sellerName",
+      headerName: "Farmer",
       minWidth: 150,
     },
     {
@@ -46,14 +51,20 @@ function FarmerContract({ signContract }) {
       minWidth: 150,
     },
     {
-      field: "tentativeYield",
-      headerName: "Tentative yield",
+      field: "estimatedYield",
+      headerName: "Estimated yield",
       minWidth: 150,
+      valueGetter: function (params) {
+        return `${params?.row?.estimatedYieldMin} - ${params?.row?.estimatedYieldMax} Tonnes`;
+      },
     },
     {
-      field: "tentativePrice",
-      headerName: "Price Agreed",
+      field: "estimatedPrice",
+      headerName: "Estimated Price",
       minWidth: 150,
+      valueGetter: function (params) {
+        return `${params?.row?.estimatedPriceMin} - ${params?.row?.estimatedPriceMax}`;
+      },
     },
     {
       field: "actions",
@@ -213,8 +224,7 @@ function FarmerContract({ signContract }) {
                   <Button
                     variant="contained"
                     onClick={() => {
-                      signContract(selectedData?.id);
-                      handleClose();
+                      signContract(farmerContractAddress, handleClose);
                     }}
                   >
                     Sign Contract
