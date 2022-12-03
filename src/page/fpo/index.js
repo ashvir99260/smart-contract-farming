@@ -18,53 +18,13 @@ function FPO() {
     fetchData(farmerContractAddress);
   }, []);
 
-  const columns = [
-    {
-      field: "productName",
-      headerName: "Name",
-      minWidth: 150,
-    },
-    {
-      field: "buyerName",
-      headerName: "Buyer",
-      minWidth: 150,
-    },
-    {
-      field: "id",
-      headerName: "ContractId",
-      minWidth: 150,
-    },
-    {
-      field: "tentativeYield",
-      headerName: "Tentative yield",
-      minWidth: 150,
-    },
-    {
-      field: "tentativePrice",
-      headerName: "Price Agreed",
-      minWidth: 150,
-    },
-    {
-      field: "actions",
-      type: "actions",
-      renderCell: (params) => <Button variant="contained">View Details</Button>,
-      flex: 1,
-    },
-  ];
-
   const labelList = [{ label: "with Farmer" }, { label: "with Buyer" }];
   const componentList = [
     {
       component: FarmerContract,
-      props: {
-        columns,
-      },
     },
     {
       component: BuyerContract,
-      props: {
-        columns,
-      },
     },
   ];
 
