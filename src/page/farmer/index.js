@@ -20,6 +20,8 @@ import {
 } from "@mui/icons-material";
 import FarmerTimeLine from "./FarmerTimeLine";
 import useMetaMask from "../../context/MetaMaskContext";
+import { toast } from "react-toastify";
+
 import BuyerContract from "../../artifacts/contracts/IcsBuyerContract.sol/IcsBuyerContract.json";
 
 function Farmer() {
@@ -49,14 +51,20 @@ function Farmer() {
       minWidth: 150,
     },
     {
-      field: "tentativeYield",
-      headerName: "Tentative yield",
+      field: "estimatedYield",
+      headerName: "Estimated yield",
       minWidth: 150,
+      valueGetter: function (params) {
+        return `${params?.row?.estimatedYieldMin} - ${params?.row?.estimatedYieldMax} Tonnes`;
+      },
     },
     {
-      field: "tentativePrice",
-      headerName: "Price Agreed",
+      field: "estimatedPrice",
+      headerName: "Estimated Price",
       minWidth: 150,
+      valueGetter: function (params) {
+        return `${params?.row?.estimatedPriceMin} - ${params?.row?.estimatedPriceMax}`;
+      },
     },
     {
       field: "actions",
@@ -85,17 +93,19 @@ function Farmer() {
     try {
       const contract = new web3.eth.Contract(
         BuyerContract.abi,
-        ICSBuyerContractAddress
+        farmerContractAddress
       );
       const d = await contract.methods;
-      console.log("contract", d);
       const reciept = await contract.methods.sellerSign().send({
         from: account,
         gas: 8000000,
       });
-      console.log("rr", reciept);
+      handleClose();
+      toast.success("Transaction Done");
     } catch (error) {
       console.error(error);
+
+      toast.error("Transaction Failed");
     }
   };
 
