@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Box, Button } from "@mui/material";
+import { Box, Button, Divider, Typography } from "@mui/material";
 
 import useMetaMask from "../../context/MetaMaskContext";
 import FarmerContract from "../../artifacts/contracts/FarmerIcsContract.sol/FarmerIcsContract.json";
@@ -82,13 +82,20 @@ function Buyer() {
   return (
     <Box
       sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
         height: "100vh",
+        display: "block",
       }}
     >
-      <DataGrid loading={loading} rows={data} columns={columns} />
+      <Typography variant={"h4"}>Buyer Contracts</Typography>
+      <Divider />
+      <Box
+        sx={{
+          p: 2,
+          height: "85vh",
+        }}
+      >
+        <DataGrid loading={loading} rows={data} columns={columns} />
+      </Box>
     </Box>
   );
 }
