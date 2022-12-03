@@ -32,6 +32,13 @@ async function main() {
  
    await deployment.deployed();
    console.log("ICS Buyer contract deployed to:", deployment.address);
+   const instance = await factory.attach(deployment.address);
+   const contractNFT = "0x334533370feb15428da4d182603db1b8d670a025";
+   await instance.setNFT(contractNFT);
+
+   const details = await instance.getDetails2();
+   console.log("Deployed contract details", details);
+   
    return deployment.address;
  }
  
