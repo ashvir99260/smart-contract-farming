@@ -1,11 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { Box, Button } from "@mui/material";
 
 import useMetaMask from "../../context/MetaMaskContext";
 
+import data from "../../data/accountData.json";
+
 function Login() {
-  const { connect } = useMetaMask();
+  const { connect, account } = useMetaMask();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (account) {
+      const accountData = data?.[account];
+      accountData && navigate(accountData.route);
+    }
+  }, [account]);
 
   return (
     <Box

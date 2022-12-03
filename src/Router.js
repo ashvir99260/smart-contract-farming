@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   BrowserRouter,
   Route,
-  Switch,
-  redirect,
   Navigate,
   Routes,
+  useLocation,
 } from "react-router-dom";
 
 import Banker from "./page/banker";
@@ -15,26 +14,27 @@ import Login from "./page/login";
 
 import useMetaMask from "./context/MetaMaskContext";
 
+import data from "./data/accountData.json";
+import Buyer from "./page/buyer";
+
 const PrivateRoute = ({ children }) => {
   const { account } = useMetaMask();
-  if (!account) {
-    return redirect(routes.LOGIN);
+  const location = useLocation();
+
+  const validateUserRoute = useMemo(() => {
+    if (account) {
+      const accountData = data?.[account];
+      if (accountData.route === location.pathname) {
+        return true;
+      }
+    }
+    return false;
+  }, [location, account]);
+  if (!validateUserRoute) {
+    return <Navigate to="/login" />;
   }
   return children;
 };
-
-function RouteValidator(props) {
-  const { isPrivate, isCacheRoute, ...rest } = props;
-
-  if (isPrivate) {
-    return (
-      <PrivateRoute>
-        <Route {...rest} />
-      </PrivateRoute>
-    );
-  }
-  return <Route {...rest} />;
-}
 
 const routes = {
   ROOT: "/",
@@ -42,15 +42,48 @@ const routes = {
   FARMER: "/farmer",
   FPO: "/fpo",
   BANKER: "/banker",
+  BUYER: "/buyer",
 };
 
 function Router() {
   const appRoutes = [
-    { path: routes.ROOT, element: <Login /> },
+    {
+      path: routes.ROOT,
+      element: <Login />,
+    },
     { path: routes.LOGIN, element: <Login /> },
-    { path: routes.FARMER, element: <Farmer />, isPrivate: true },
-    { path: routes.FPO, element: <FPO />, isPrivate: true },
-    { path: routes.BANKER, element: <Banker />, isPrivate: true },
+    {
+      path: routes.FARMER,
+      element: (
+        <PrivateRoute>
+          <Farmer />
+        </PrivateRoute>
+      ),
+    },
+    {
+      path: routes.FPO,
+      element: (
+        <PrivateRoute>
+          <FPO />
+        </PrivateRoute>
+      ),
+    },
+    {
+      path: routes.BANKER,
+      element: (
+        <PrivateRoute>
+          <Banker />
+        </PrivateRoute>
+      ),
+    },
+    {
+      path: routes.BUYER,
+      element: (
+        <PrivateRoute>
+          <Buyer />
+        </PrivateRoute>
+      ),
+    },
   ];
 
   return (
@@ -58,7 +91,6 @@ function Router() {
       <Routes>
         {appRoutes.map((route, index) => (
           <Route {...route} key={index} />
-          // <RouteValidator key={index} {...route} />
         ))}
       </Routes>
     </BrowserRouter>

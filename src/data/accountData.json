@@ -1,0 +1,25 @@
+{
+  "0x5F2E517e48ba173cD88E85BE3db392F36C19C20E": {
+    "user": "Farmer",
+    "pvtKey": "1ab5f9504085cea9c58550113bb7637512850152ac8e002339880a175b03ee79",
+    "route": "/farmer"
+  },
+
+  "0x130cE4089d8E8C695b82b64c7AF0DF59E7007F77": {
+    "user": "Banker",
+    "pvtKey": "8779e237dc37db84b41c6a5c37b6fe006b87b166d4cf22f32835019f5fa3a851",
+    "route": "/banker"
+  },
+
+  "0x7FDEC9d89f1a9188e94fB19C74B2b8E61b79F298": {
+    "user": "FPO",
+    "pvtKey": "8400b4c97da993f98b5120744cf27f14684d292c6a2843e5029cc2063e86aa42",
+    "route": "/fpo"
+  },
+
+  "0x4a3060514F300B971E556be8a88f408eDccF0C2D": {
+    "user": "Buyer",
+    "pvtKey": "1a6a38094aed5d61edc7a7173ecae4dd9eecc8d3dc9c95998bef360c824703f6",
+    "route": "/buyer"
+  }
+}
