@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 
 import { DataGrid } from "@mui/x-data-grid";
+import { farmerContractAddress } from "../../web3/constants";
 
 import useMetaMask from "../../context/MetaMaskContext";
 import FarmerContract from "../../artifacts/contracts/FarmerIcsContract.sol/FarmerIcsContract.json";
-
-const farmerContractAddress = "0x1dD8629e4e4e659CB10344a063847fc5bc29c25C";
-const fpoContractAddress = "0xe9817a5D9c02EeA1C2329D94E3799B539CdfD519";
 
 function Banker() {
   const { library: web3 } = useMetaMask();
@@ -31,9 +29,7 @@ function Banker() {
         .call()
         .then((res) => {
           const result = Object.assign({}, res);
-          setData([
-            { id: "0x1dD8629e4e4e659CB10344a063847fc5bc29c25C", ...result },
-          ]);
+          setData([{ id: farmerContractAddress, ...result }]);
         });
     } catch (error) {
       console.error(error);
@@ -81,16 +77,20 @@ function Banker() {
   ];
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-      }}
-    >
-      <DataGrid loading={loading} rows={data} columns={columns} />
-    </Box>
+    <>
+      <Typography variant="h4">Banker Details</Typography>
+
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <DataGrid loading={loading} rows={data} columns={columns} />
+      </Box>
+    </>
   );
 }
 

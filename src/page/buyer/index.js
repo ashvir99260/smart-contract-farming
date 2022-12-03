@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 
-import { Box, Button } from "@mui/material";
-
+import { Box, Button, Typography } from "@mui/material";
+import { fpoContractAddress } from "../../web3/constants";
 import useMetaMask from "../../context/MetaMaskContext";
 import FarmerContract from "../../artifacts/contracts/FarmerIcsContract.sol/FarmerIcsContract.json";
 
 import { DataGrid } from "@mui/x-data-grid";
-
-const farmerContractAddress = "0x1dD8629e4e4e659CB10344a063847fc5bc29c25C";
-const fpoContractAddress = "0xe9817a5D9c02EeA1C2329D94E3799B539CdfD519";
 
 function Buyer() {
   const { library: web3 } = useMetaMask();
@@ -80,16 +77,20 @@ function Buyer() {
   ];
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-      }}
-    >
-      <DataGrid loading={loading} rows={data} columns={columns} />
-    </Box>
+    <>
+      <Typography variant="h4">Buyer Details</Typography>
+
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <DataGrid loading={loading} rows={data} columns={columns} />
+      </Box>
+    </>
   );
 }
 
