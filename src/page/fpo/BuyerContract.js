@@ -19,9 +19,11 @@ import useMetaMask from "../../context/MetaMaskContext";
 import BuyerContract from "../../artifacts/contracts/IcsBuyerContract.sol/IcsBuyerContract.json";
 
 import { toast } from "react-toastify";
+import ShowStatus from "../banker/ShowStatus";
 
 function BuyerContractComponent() {
   const { loading, data, fetchData } = useFetchContractDetails();
+
   const [openModal, setOpenModal] = useState(false);
   const [selectedData, setSelectedData] = useState({});
   const { library: web3, account } = useMetaMask();
@@ -238,7 +240,7 @@ function BuyerContractComponent() {
               </Grid>
               <Grid container item xs={12}>
                 <Grid item xs={6}>
-                  Signed by : {selectedData?.sellerName}
+                  <ShowStatus data={selectedData} />
                 </Grid>
                 <Grid item xs={6} container justifyContent="flex-end">
                   <Button variant="contained" onClick={signContract}>
