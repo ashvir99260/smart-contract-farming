@@ -23,6 +23,9 @@ struct ContractDetails {
   uint256 estimatedPriceMax; // in PaymentToken (ERC20)
   uint256 tentativePrice; // in PaymentToken (ERC20)
 
+  uint256 releasedAmount;
+  uint256 lockedAmount;
+  address contractNFT;
 }
 
 // Buyer<>Seller contract
@@ -32,6 +35,7 @@ contract EscrowPurchase {
   // erc20 contract address
   address erc20Address;
   address admin;//bank
+  address contractNFT;
   address unlocker;
 
   string productName;
@@ -109,7 +113,7 @@ contract EscrowPurchase {
     require(_downPaymentBps >=0 && _downPaymentBps < 10_000, "Invalid downPaymentBps, please pass percentage basis points");
     productName = _productName;
     admin = msg.sender;
-    unlocker = admin;
+    unlocker = buyer; // Changed from Bank doing the unlocking to the buyer doing unlocking automatically
     erc20Address = _tokenAddress;
     buyer = _buyer;
     buyerName = _buyerName;
@@ -149,6 +153,8 @@ contract EscrowPurchase {
     buyerSigned = true;
     lockedAmount = balance;
     emit BuyerSigned(buyer, seller, contractValueMin, contractValueMax);
+
+    _makeDownpayment(); //  release the pre-payment
   }
 
   function sellerSign()
@@ -165,10 +171,8 @@ contract EscrowPurchase {
     unlocker = _unlocker;
   }
 
-  function releaseAmount(uint256 _amount)
-  onlyBuyer
-  onlySignedContract
-  external
+  function _releaseAmount(uint256 _amount)
+  internal
   returns (bool)
   {
     PaymentToken token = PaymentToken(erc20Address);
@@ -179,7 +183,17 @@ contract EscrowPurchase {
     lockedAmount = lockedAmount - _amount;
 
     emit Release(buyer, seller, _amount);
+    this.unlockAmount(_amount); // auto unlock
     return true;
+  }
+
+  function releaseAmount(uint256 _amount)
+  onlyBuyer
+  onlySignedContract
+  external
+  returns (bool)
+  {
+    return _releaseAmount(_amount);
   }
 
   function unlockAmount(uint256 _amount)
@@ -196,10 +210,8 @@ contract EscrowPurchase {
     return true;
   }
 
-  function makeDownpayment()
-  onlyBuyer
-  onlySignedContract
-  external
+  function _makeDownpayment()
+  internal
   returns (bool)
   {
     PaymentToken token = PaymentToken(erc20Address);
@@ -207,9 +219,19 @@ contract EscrowPurchase {
     uint256 downPayment = downPaymentBps * contractValueMin / 10_000;
     require( downPayment < balance, "Insufficient funds");
 		releasedAmount = releasedAmount + downPayment;
-
+    // console.log("Released", releasedAmount);
     emit Release(buyer, seller, downPayment);
     return true;
+  }
+  
+
+  function makeDownpayment()
+  onlyBuyer
+  onlySignedContract
+  external
+  returns (bool)
+  {
+    return _makeDownpayment();
   }
   
   function finalPayment()
@@ -261,6 +283,13 @@ contract EscrowPurchase {
     emit Cancel(buyer, seller);
   }
 
+  function setNFT(address _nftAddress)
+  onlyAdmin
+  external 
+  {
+    contractNFT = _nftAddress;
+  }
+
   // retrieve current state of transaction in escrow
   // returns total amount available, locked amount 
   // and producer address
@@ -309,8 +338,9 @@ contract EscrowPurchase {
     return (productName, estimatedYieldMin, estimatedYieldMax, estimatedPriceMin, estimatedPriceMax);
   }
 
-  function getDetails2()
-  external
+
+  function _getDetails()
+  internal
   view
   returns(ContractDetails memory)
   {
@@ -325,6 +355,17 @@ contract EscrowPurchase {
       , estimatedPriceMin
       , estimatedPriceMax
       , tentativePrice
+      , releasedAmount
+      , lockedAmount
+      , contractNFT
     );
+  }
+
+  function getDetails2()
+  external
+  view
+  returns(ContractDetails memory)
+  {
+    return _getDetails();
   }
 }
