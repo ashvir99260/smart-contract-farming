@@ -34,6 +34,14 @@ const TOKEN_ADDRESS = "0x9A3d350cF715909dFaE4336d37F84E0Ae2682312";
  
    await deployment.deployed();
    console.log("Farmer/ICS contract deployed to:", deployment.address);
+
+   const instance = await factory.attach(deployment.address);
+   const contractNFT = "0x334533370feb15428da4d182603db1b8d670a025";
+   await instance.setNFT(contractNFT);
+
+   const details = await instance.getDetails2();
+   console.log("Deployed contract details", details);
+
    return deployment.address;
  }
  

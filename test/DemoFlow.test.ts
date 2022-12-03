@@ -63,10 +63,10 @@ describe("ICS/Buyer contract", function() {
         // .then(dumpIcsBuyerContract)
         .then(buyerSigns)
         // .then(dumpIcsBuyerContract)
-        .then(finalSettlement)
+        .then(acceptHarvest)
         ;
 
-      async function finalSettlement() {
+      async function acceptHarvest() {
         const finalYield = 18, finalPrice =100;
         await asBuyer.acceptHarvest(finalYield, finalPrice);
       }
