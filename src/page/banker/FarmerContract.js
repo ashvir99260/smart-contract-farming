@@ -9,13 +9,13 @@ import { Box, Button, Chip, Grid, Paper, Typography } from "@mui/material";
 import Dialog from "../../components/Dialog";
 import {
   CalendarMonth,
-  CurrencyBitcoin,
+  CurrencyExchange,
   EnergySavingsLeaf,
   WorkspacePremium,
 } from "@mui/icons-material";
 import FarmerTimeLine from "../farmer/FarmerTimeLine";
 
-function FarmerContract() {
+function FarmerContract({ signContract }) {
   const { loading, data, fetchData } = useFetchContractDetails();
   const [openModal, setOpenModal] = useState(false);
   const [selectedData, setSelectedData] = useState({});
@@ -136,9 +136,9 @@ function FarmerContract() {
                   }}
                 >
                   <Chip
-                    icon={<CurrencyBitcoin />}
+                    icon={<CurrencyExchange />}
                     sx={{ m: 0.5, borderRadius: "8px" }}
-                    label={`${selectedData?.estimatedYieldMin} - ${selectedData?.estimatedYieldMax}`}
+                    label={`${selectedData?.estimatedPriceMin} - ${selectedData?.estimatedPriceMax}`}
                   />
                   <Chip
                     icon={<CalendarMonth />}
@@ -210,7 +210,15 @@ function FarmerContract() {
                   Signed by : {selectedData?.sellerName}
                 </Grid>
                 <Grid item xs={6} container justifyContent="flex-end">
-                  <Button variant="contained">Sign Contract</Button>
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      signContract(selectedData?.id);
+                      handleClose();
+                    }}
+                  >
+                    Sign Contract
+                  </Button>
                 </Grid>
               </Grid>
             </Grid>
