@@ -16,6 +16,7 @@ import useMetaMask from "../../context/MetaMaskContext";
 // import { ICSBuyerContractAddress } from "../../web3/constants";
 import FarmerContract from "../../artifacts/contracts/FarmerIcsContract.sol/FarmerIcsContract.json";
 import BuyerContract from "../../artifacts/contracts/IcsBuyerContract.sol/IcsBuyerContract.json";
+import PaymentTokenContract from "../../artifacts/contracts/PaymentToken.sol/PaymentToken.json";
 import { ICSBuyerContractAddress } from "../../web3/constants";
 
 import { DataGrid } from "@mui/x-data-grid";
@@ -30,6 +31,7 @@ import {
 import { toast } from "react-toastify";
 import BuyerTimeLine from "./BuyerTimeLine";
 import ShowStatus from "../banker/ShowStatus";
+import tokenData from "../../data/tokenData.json";
 
 function Buyer() {
   const { library: web3, account } = useMetaMask();
@@ -109,6 +111,7 @@ function Buyer() {
         from: account,
         gas: 8000000,
       });
+      handleClose();
       toast.success("Transaction Done");
     } catch (error) {
       console.error(error);
@@ -120,8 +123,8 @@ function Buyer() {
   const approveContract = async () => {
     try {
       const contract = new web3.eth.Contract(
-        BuyerContract.abi,
-        ICSBuyerContractAddress
+        PaymentTokenContract.abi,
+        tokenData.tokenAddress
       );
       const d = await contract.methods;
       const reciept = await contract.methods
@@ -130,7 +133,32 @@ function Buyer() {
           from: account,
           gas: 8000000,
         });
-      toast.success("Transaction Done");
+
+      toast.success("Transaction Approved");
+      if (reciept.status) {
+        await signContract();
+      }
+    } catch (error) {
+      console.error(error);
+
+      toast.error("Transaction Failed");
+    }
+  };
+
+  const acceptHarvest = async () => {
+    try {
+      const contract = new web3.eth.Contract(
+        BuyerContract.abi,
+        ICSBuyerContractAddress
+      );
+      const d = await contract.methods;
+      const reciept = await contract.methods
+        .acceptHarvest(quantity, price)
+        .send({
+          from: account,
+          gas: 8000000,
+        });
+      await signContract();
     } catch (error) {
       console.error(error);
 
@@ -304,8 +332,8 @@ function Buyer() {
                     <ShowStatus data={selectedData} />
                   </Grid>
                   <Grid item xs={6} container justifyContent="flex-end">
-                    <Button variant="contained" onClick={approveContract}>
-                      Approve
+                    <Button variant="contained" onClick={acceptHarvest}>
+                      Accept Harvest
                     </Button>
                   </Grid>
                 </Grid>
@@ -315,7 +343,7 @@ function Buyer() {
                     <ShowStatus data={selectedData} />
                   </Grid>
                   <Grid item xs={6} container justifyContent="flex-end">
-                    <Button variant="contained" onClick={signContract}>
+                    <Button variant="contained" onClick={approveContract}>
                       Sign Contract
                     </Button>
                   </Grid>
