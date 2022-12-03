@@ -56,7 +56,8 @@
     "contract:compile": "yarn hardhat compile",
     "contract:cp": "rm -rf src/artifacts && cp -r artifacts src",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy-contracts": "yarn hardhat run scripts/ICSBuyerContract_deploy.ts --network mumbai && yarn hardhat run scripts/FarmerIcsContract_deploy.ts --network mumbai"
   },
   "eslintConfig": {
     "extends": [
