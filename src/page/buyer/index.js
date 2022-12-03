@@ -3,12 +3,11 @@ import React, { useEffect, useState } from "react";
 import { Box, Button, Divider, Typography } from "@mui/material";
 
 import useMetaMask from "../../context/MetaMaskContext";
+
+import { fpoContractAddress } from "../../web3/constants";
 import FarmerContract from "../../artifacts/contracts/FarmerIcsContract.sol/FarmerIcsContract.json";
 
 import { DataGrid } from "@mui/x-data-grid";
-
-const farmerContractAddress = "0x1dD8629e4e4e659CB10344a063847fc5bc29c25C";
-const fpoContractAddress = "0xe9817a5D9c02EeA1C2329D94E3799B539CdfD519";
 
 function Buyer() {
   const { library: web3 } = useMetaMask();
