@@ -1,23 +1,12 @@
-import React, { useEffect } from "react";
+import React from "react";
 
-import { Box, Button, Divider, Typography } from "@mui/material";
+import { Box, Divider, Typography } from "@mui/material";
 
-import { DataGrid } from "@mui/x-data-grid";
-
-import { farmerContractAddress } from "../../web3/constants";
-
-import useFetchContractDetails from "../../hooks/useFetchContractDetails";
 import FarmerContract from "./FarmerContract";
 import BuyerContract from "./BuyerContract";
 import Tabs from "../../components/Tabs";
 
 function FPO() {
-  const { loading, data, fetchData } = useFetchContractDetails();
-
-  useEffect(() => {
-    fetchData(farmerContractAddress);
-  }, []);
-
   const labelList = [{ label: "with Farmer" }, { label: "with Buyer" }];
   const componentList = [
     {
