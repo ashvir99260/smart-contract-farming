@@ -4,42 +4,21 @@ import { Box, Button, Divider, Typography } from "@mui/material";
 
 import useMetaMask from "../../context/MetaMaskContext";
 
-import { ICSBuyerContractAddress } from "../../web3/constants";
+// import { ICSBuyerContractAddress } from "../../web3/constants";
 import FarmerContract from "../../artifacts/contracts/FarmerIcsContract.sol/FarmerIcsContract.json";
 import BuyerContract from "../../artifacts/contracts/IcsBuyerContract.sol/IcsBuyerContract.json";
+import { ICSBuyerContractAddress } from "../../web3/constants";
 
 import { DataGrid } from "@mui/x-data-grid";
+import useFetchContractDetails from "../../hooks/useFetchContractDetails";
 
 function Buyer() {
   const { library: web3, account } = useMetaMask();
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { loading, data, fetchData } = useFetchContractDetails();
 
   useEffect(() => {
-    fetchData();
-  }, [web3]);
-
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      const contract = new web3.eth.Contract(
-        FarmerContract.abi,
-        ICSBuyerContractAddress
-      );
-
-      contract.methods
-        .getDetails2()
-        .call()
-        .then((res) => {
-          const result = Object.assign({}, res);
-          setData([{ id: ICSBuyerContractAddress, ...result }]);
-        });
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    fetchData(ICSBuyerContractAddress);
+  }, []);
 
   const columns = [
     {
@@ -70,11 +49,7 @@ function Buyer() {
     {
       field: "actions",
       type: "actions",
-      renderCell: (params) => (
-        <Button variant="contained" color="secondary">
-          View Details
-        </Button>
-      ),
+      renderCell: (params) => <Button variant="contained">View Details</Button>,
       flex: 1,
     },
   ];
