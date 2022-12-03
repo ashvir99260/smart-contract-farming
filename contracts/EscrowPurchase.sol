@@ -7,6 +7,24 @@ import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "./PaymentToken.sol";
 
+struct ContractDetails {
+  string productName;
+  address buyer;
+  string  buyerName;
+
+  address seller;
+  string  sellerName;
+
+  uint256 estimatedYieldMin; // Kg
+  uint256 estimatedYieldMax; // Kg
+  uint256 tentativeYield; // Kg
+
+  uint256 estimatedPriceMin; // in PaymentToken (ERC20)
+  uint256 estimatedPriceMax; // in PaymentToken (ERC20)
+  uint256 tentativePrice; // in PaymentToken (ERC20)
+
+}
+
 // Buyer<>Seller contract
 // Contract used between ICS <> Wholesaler as well as Farmer <> ICS
 contract EscrowPurchase {
@@ -265,5 +283,48 @@ contract EscrowPurchase {
   returns (uint256, uint256)
   {
     return (contractValueMin, contractValueMax);
+  }
+
+  function getBuyer()
+  external
+  view 
+  returns (string memory, address)
+  {
+    return (buyerName, buyer);
+  }
+
+  function getSeller()
+  external
+  view 
+  returns (string memory, address)
+  {
+    return (sellerName, seller);
+  }
+
+  function getProduct()
+  external
+  view 
+  returns (string memory, uint256,uint256,uint256,uint256)
+  {
+    return (productName, estimatedYieldMin, estimatedYieldMax, estimatedPriceMin, estimatedPriceMax);
+  }
+
+  function getDetails2()
+  external
+  view
+  returns(ContractDetails memory)
+  {
+    return ContractDetails(productName
+      , buyer
+      , buyerName
+      , seller
+      , sellerName
+      , estimatedYieldMin
+      , estimatedYieldMax
+      , tentativeYield
+      , estimatedPriceMin
+      , estimatedPriceMax
+      , tentativePrice
+    );
   }
 }
