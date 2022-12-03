@@ -158,6 +158,8 @@ function Buyer() {
           from: account,
           gas: 8000000,
         });
+      handleClose();
+      toast.success("Transaction Done");
     } catch (error) {
       console.error(error);
 
@@ -273,80 +275,54 @@ function Buyer() {
             }}
           >
             <Grid>
-              <Grid>
-                <Typography variant="h6">Contract</Typography>
-
-                <Typography
-                  variant="subtitle1"
-                  sx={{
-                    fontWeight: 550,
-                  }}
-                >
-                  Value: {selectedData?.tentativePrice}
-                </Typography>
-
-                <Typography
-                  variant="subtitle1"
-                  sx={{
-                    fontWeight: 550,
-                  }}
-                >
-                  Locked Amount: {selectedData?.tentativePrice}
-                </Typography>
-
-                <Typography
-                  variant="subtitle1"
-                  sx={{
-                    fontWeight: 550,
-                  }}
-                >
-                  Locked Amount: {selectedData?.tentativePrice}
-                </Typography>
-              </Grid>
-              <Grid sx={{ mt: 3 }}>
-                <Typography variant="h6">Release Events</Typography>
-                <BuyerTimeLine />
-              </Grid>
               {selectedData?.buyerSigned ? (
-                <Grid container spacing={2}>
-                  <Grid item xs={6}>
-                    <TextField
-                      label="Quantity"
-                      variant="outlined"
-                      fullWidth
-                      value={quantity}
-                      onChange={(e) => setQuantity(e.target.value)}
-                    />
+                <>
+                  <Grid sx={{ mt: 3 }}>
+                    <Typography variant="h6">Release Events</Typography>
+                    <BuyerTimeLine />
                   </Grid>
-                  <Grid item xs={6}>
-                    <TextField
-                      label="Price"
-                      variant="outlined"
-                      fullWidth
-                      value={price}
-                      onChange={(e) => setPrice(e.target.value)}
-                    />
+                  <Grid container spacing={2}>
+                    <Grid item xs={6}>
+                      <TextField
+                        label="Quantity"
+                        variant="outlined"
+                        fullWidth
+                        value={quantity}
+                        onChange={(e) => setQuantity(e.target.value)}
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <TextField
+                        label="Price"
+                        variant="outlined"
+                        fullWidth
+                        value={price}
+                        onChange={(e) => setPrice(e.target.value)}
+                      />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <ShowStatus data={selectedData} />
+                    </Grid>
+                    <Grid item xs={6} container justifyContent="flex-end">
+                      <Button variant="contained" onClick={acceptHarvest}>
+                        Accept Harvest
+                      </Button>
+                    </Grid>
                   </Grid>
-                  <Grid item xs={6}>
-                    <ShowStatus data={selectedData} />
-                  </Grid>
-                  <Grid item xs={6} container justifyContent="flex-end">
-                    <Button variant="contained" onClick={acceptHarvest}>
-                      Accept Harvest
-                    </Button>
-                  </Grid>
-                </Grid>
+                </>
               ) : (
-                <Grid container spacing={2}>
-                  <Grid item xs={6}>
-                    <ShowStatus data={selectedData} />
+                <>
+                  <Grid container spacing={2}>
+                    <Grid item xs={6}>
+                      <ShowStatus data={selectedData} />
+                    </Grid>
+                    <Grid item xs={6} container justifyContent="flex-end">
+                      <Button variant="contained" onClick={approveContract}>
+                        Sign Contract
+                      </Button>
+                    </Grid>
                   </Grid>
-                  <Grid item xs={6} container justifyContent="flex-end">
-                    <Button variant="contained" onClick={approveContract}>
-                      Sign Contract
-                    </Button>
-                  </Grid>
-                </Grid>
+                </>
               )}
             </Grid>
           </Paper>
