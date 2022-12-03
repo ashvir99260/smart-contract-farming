@@ -1,25 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import Web3 from "web3";
-import { Web3ReactProvider } from "@web3-react/core";
 
-import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { MetaMaskProvider } from "./context/MetaMaskContext";
 
-function getLibrary(provider, connector) {
-  return new Web3(provider);
-}
+import "./index.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <Web3ReactProvider getLibrary={getLibrary}>
-      <MetaMaskProvider>
-        <App />
-      </MetaMaskProvider>
-    </Web3ReactProvider>
+    <App />
   </React.StrictMode>
 );
 

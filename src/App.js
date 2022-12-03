@@ -1,30 +1,26 @@
-import logo from "./logo.svg";
+import React from "react";
+
+import Web3 from "web3";
+import { Web3ReactProvider } from "@web3-react/core";
+
+import Router from "./Router";
+
+import { MetaMaskProvider } from "./context/MetaMaskContext";
+
 import "./App.css";
-import { Button } from "@mui/material";
-import useMetaMask from "./context/MetaMaskContext";
+
+function getLibrary(provider, connector) {
+  return new Web3(provider);
+}
 
 function App() {
-  const { connect, disconnect, isActive } = useMetaMask();
-
   return (
     <div className="App">
-      <header className="App-header">
-        <Button onClick={connect} variant="secondary">
-          <img
-            src="images/metamask.svg"
-            alt="MetaMask"
-            width="50"
-            height="50"
-          />{" "}
-          Login
-        </Button>
-        {isActive && (
-          <Button onClick={disconnect} variant="danger">
-            Disconnect from MetaMask{" "}
-            <img src="images/noun_waving_3666509.svg" height="50" width="50" />
-          </Button>
-        )}
-      </header>
+      <Web3ReactProvider getLibrary={getLibrary}>
+        <MetaMaskProvider>
+          <Router />
+        </MetaMaskProvider>
+      </Web3ReactProvider>
     </div>
   );
 }
