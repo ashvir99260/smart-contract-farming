@@ -29,6 +29,10 @@ struct ContractDetails {
 
   uint256 contractValueMin;
   uint256 contractValueMax;
+
+  bool adminSigned;
+  bool buyerSigned;
+  bool sellerSigned;
 }
 
 // Buyer<>Seller contract
@@ -366,6 +370,9 @@ contract EscrowPurchase {
       , contractNFT
       , contractValueMin
       , contractValueMax
+      , adminSigned
+      , buyerSigned
+      , sellerSigned
     );
   }
 

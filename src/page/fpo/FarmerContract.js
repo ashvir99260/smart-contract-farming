@@ -18,6 +18,7 @@ import BuyerContract from "../../artifacts/contracts/IcsBuyerContract.sol/IcsBuy
 import useMetaMask from "../../context/MetaMaskContext";
 
 import { toast } from "react-toastify";
+import ShowStatus from "../banker/ShowStatus";
 
 function FarmerContract() {
   const { loading, data, fetchData } = useFetchContractDetails();
@@ -238,7 +239,7 @@ function FarmerContract() {
               </Grid>
               <Grid container item xs={12}>
                 <Grid item xs={6}>
-                  Signed by : {selectedData?.sellerName}
+                  <ShowStatus data={selectedData} />
                 </Grid>
                 <Grid item xs={6} container justifyContent="flex-end">
                   <Button variant="contained" onClick={signContract}>

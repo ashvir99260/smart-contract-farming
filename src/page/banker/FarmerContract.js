@@ -14,6 +14,7 @@ import {
   WorkspacePremium,
 } from "@mui/icons-material";
 import FarmerTimeLine from "../farmer/FarmerTimeLine";
+import ShowStatus from "./ShowStatus";
 
 function FarmerContract({ signContract }) {
   const { loading, data, fetchData } = useFetchContractDetails();
@@ -218,7 +219,7 @@ function FarmerContract({ signContract }) {
               </Grid>
               <Grid container item xs={12}>
                 <Grid item xs={6}>
-                  Signed by : {selectedData?.sellerName}
+                  <ShowStatus data={selectedData} />
                 </Grid>
                 <Grid item xs={6} container justifyContent="flex-end">
                   <Button
