@@ -14,7 +14,6 @@ import { ethers } from "ethers";
 
 function Form() {
   // const { library } = useMetaMask();
-  const [open, setOpen] = useState(false);
   const [txHash, setTxHash] = useState("");
 
   const sign_message = async () => {
@@ -76,7 +75,6 @@ function Form() {
     );
     console.log(response);
     if (response?.data?.Hash) {
-      setOpen(true);
       setTxHash(response.data.Hash);
     }
     /*
@@ -88,15 +86,6 @@ function Form() {
         }
       Note: Hash in response is CID.
     */
-  };
-
-  // snackbar code
-  const handleClose = (e, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpen(false);
   };
 
   return (
@@ -182,16 +171,8 @@ function Form() {
             onChange={(e) => deployEncrypted(e)}
           />
         </Stack>
-
-        <Button style={{ marginTop: "2rem" }} variant="contained">
-          Submit
-        </Button>
-        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-          <Alert
-            onClose={handleClose}
-            severity="success"
-            sx={{ width: "100%" }}
-          >
+        {txHash && (
+          <Typography variant="body2">
             Success!! Access file here:{" "}
             <a
               href={`https://files.lighthouse.storage/viewFile/${txHash}`}
@@ -200,8 +181,11 @@ function Form() {
             >
               here
             </a>
-          </Alert>
-        </Snackbar>
+          </Typography>
+        )}
+        <Button style={{ marginTop: "2rem" }} variant="contained">
+          Submit
+        </Button>
       </Stack>
     </Box>
   );
