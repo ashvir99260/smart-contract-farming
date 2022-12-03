@@ -1,14 +1,18 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
-import { injected } from "./wallet/injected";
 import { useWeb3React } from "@web3-react/core";
+
+import { injected } from "./wallet/injected";
+
+import data from "../data/tokenData.json";
 
 export const MetaMaskContext = React.createContext(null);
 
 export const MetaMaskProvider = ({ children }) => {
-  const { activate, account, active, deactivate } = useWeb3React();
+  const { activate, account, active, deactivate, library } = useWeb3React();
 
   const [isActive, setIsActive] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [balance, setBalance] = useState(0);
 
   // Init Loading
   useEffect(() => {
@@ -24,6 +28,26 @@ export const MetaMaskProvider = ({ children }) => {
   useEffect(() => {
     handleIsActive();
   }, [handleIsActive]);
+
+  useEffect(() => {
+    if (library) {
+      fetchBalance();
+    }
+  }, [library]);
+
+  const fetchBalance = async () => {
+    if (library) {
+      // Get ERC20 Token contract instance
+      let contract = new library.eth.Contract(data.minABI, data.tokenAddress);
+      // Call balanceOf function
+      await contract.methods
+        .balanceOf(account)
+        .call()
+        .then((balance) => {
+          setBalance(library.utils.fromWei(balance));
+        });
+    }
+  };
 
   // Connect to MetaMask wallet
   const connect = async () => {
@@ -50,8 +74,11 @@ export const MetaMaskProvider = ({ children }) => {
       isLoading,
       connect,
       disconnect,
+      library,
+      balance,
+      fetchBalance,
     }),
-    [isActive, isLoading]
+    [isActive, isLoading, account, library, balance]
   );
 
   return (

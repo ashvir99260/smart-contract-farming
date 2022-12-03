@@ -13,7 +13,7 @@ import useMetaMask from "../../context/MetaMaskContext";
 import ProfileMenu from "./ProfileMenu";
 
 function Header(children) {
-  const { account } = useMetaMask();
+  const { account, balance } = useMetaMask();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -42,7 +42,14 @@ function Header(children) {
             Smart Contract Farming
           </Typography>
           {account && (
-            <div>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                alignItems: "center",
+              }}
+            >
+              <Typography>Balance: {balance}</Typography>
               <IconButton
                 size="large"
                 aria-label="account of current user"
@@ -51,7 +58,7 @@ function Header(children) {
                 onClick={handleClick}
                 color="inherit"
               >
-                <Avatar />
+                <Avatar sx={{ width: 36, height: 36 }} />
               </IconButton>
               <Menu
                 id="menu-appbar"
@@ -70,7 +77,7 @@ function Header(children) {
               >
                 <ProfileMenu />
               </Menu>
-            </div>
+            </Box>
           )}
         </Box>
       </Toolbar>
