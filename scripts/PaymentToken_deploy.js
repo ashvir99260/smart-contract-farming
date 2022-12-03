@@ -2,12 +2,13 @@
 
 const {ethers} = require("hardhat");
 
+const TEN_BILLION = '10000000000000000000000000000';
 
 async function main() {
 
   const factory = await ethers.getContractFactory("PaymentToken");
   console.log('Deploying PaymentToken...');
-  const deployment = await factory.deploy('10000000000000000000000000');
+  const deployment = await factory.deploy(TEN_BILLION);
 
   await deployment.deployed();
   console.log("PaymentToken deployed to:", deployment.address);
