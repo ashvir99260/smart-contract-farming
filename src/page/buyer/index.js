@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 
-import { Box, Button, Typography } from "@mui/material";
-import { fpoContractAddress } from "../../web3/constants";
+import { Box, Button, Divider, Typography } from "@mui/material";
+
 import useMetaMask from "../../context/MetaMaskContext";
+
+import { fpoContractAddress } from "../../web3/constants";
 import FarmerContract from "../../artifacts/contracts/FarmerIcsContract.sol/FarmerIcsContract.json";
 
 import { DataGrid } from "@mui/x-data-grid";
@@ -77,20 +79,23 @@ function Buyer() {
   ];
 
   return (
-    <>
-      <Typography variant="h4">Buyer Details</Typography>
-
+    <Box
+      sx={{
+        height: "100vh",
+        display: "block",
+      }}
+    >
+      <Typography variant={"h4"}>Buyer Contracts</Typography>
+      <Divider />
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
+          p: 2,
+          height: "85vh",
         }}
       >
         <DataGrid loading={loading} rows={data} columns={columns} />
       </Box>
-    </>
+    </Box>
   );
 }
 

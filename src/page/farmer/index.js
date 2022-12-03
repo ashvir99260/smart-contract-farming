@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Divider, Typography } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+
 import { farmerContractAddress } from "../../web3/constants";
 
 import useMetaMask from "../../context/MetaMaskContext";
@@ -77,19 +78,23 @@ function Farmer() {
   ];
 
   return (
-    <>
-      <Typography variant="h4">Farmer Details</Typography>
+    <Box
+      sx={{
+        height: "100vh",
+        display: "block",
+      }}
+    >
+      <Typography variant={"h4"}>Farmer Contracts</Typography>
+      <Divider />
       <Box
         sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
+          p: 2,
+          height: "85vh",
         }}
       >
         <DataGrid loading={loading} rows={data} columns={columns} />
       </Box>
-    </>
+    </Box>
   );
 }
 
