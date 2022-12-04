@@ -29,6 +29,9 @@ const PrivateRoute = ({ children }) => {
       if (accountData.route === location.pathname) {
         return true;
       }
+      if (location.pathname === "/form") {
+        return true;
+      }
     }
     return false;
   }, [location, account]);
@@ -89,7 +92,11 @@ function Router() {
     },
     {
       path: routes.FORM,
-      element: <Form />,
+      element: (
+        <PrivateRoute>
+          <Form />
+        </PrivateRoute>
+      ),
     },
   ];
 

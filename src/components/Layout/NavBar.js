@@ -17,6 +17,8 @@ import { styled } from "@mui/material/styles";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
+import { useNavigate } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -60,6 +62,7 @@ const Drawer = styled(MuiDrawer, {
 
 function NavBar(children) {
   const [open, setOpen] = React.useState(false);
+  const navigate = useNavigate();
 
   const handleDrawerState = () => {
     setOpen(!open);
@@ -69,6 +72,12 @@ function NavBar(children) {
     {
       name: "Dashboard",
       icon: <DashboardIcon />,
+      route: "/",
+    },
+    {
+      name: "Create Buyer Contract",
+      icon: <CreateNewFolderIcon />,
+      route: "/form",
     },
   ];
 
@@ -77,7 +86,7 @@ function NavBar(children) {
       <Toolbar />
       <Box>
         <List>
-          {menu.map(({ name, icon }, index) => (
+          {menu.map(({ name, icon, route }, index) => (
             <ListItem key={name} disablePadding>
               <ListItemButton
                 sx={{
@@ -85,6 +94,7 @@ function NavBar(children) {
                   justifyContent: open ? "initial" : "center",
                   px: 2.5,
                 }}
+                onClick={() => navigate(route)}
               >
                 <ListItemIcon
                   sx={{
